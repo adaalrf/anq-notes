@@ -1,0 +1,6 @@
+node_modules/
+public/
+.anq-build-*/
+.anq-previous-*/
+test-results/
+package-lock.json

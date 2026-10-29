@@ -1,0 +1,23 @@
+{
+    admin off
+    auto_https off
+}
+:8080 {
+    root * /srv/site
+    encode gzip
+    header {
+        Content-Security-Policy "default-src 'none'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+        X-Content-Type-Options nosniff
+        Referrer-Policy no-referrer
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    }
+    respond /healthz "ok" 200
+    file_server {
+        hide .anq-ssg-output
+    }
+    handle_errors {
+        @notfound expression {err.status_code} == 404
+        rewrite @notfound /404.html
+        file_server
+    }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "anq-notes",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "tsx src/cli.ts",
+    "dev": "tsx src/serve.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "test:browser": "tsx tests/browser.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run format:check && npm run typecheck && npm test && npm run build",
+    "test:container": "tsx tests/container.ts"
+  },
+  "dependencies": {
+    "htmlparser2": "10.1.0",
+    "marked": "18.1.2",
+    "sanitize-html": "2.18.1",
+    "yaml": "2.9.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.64.1",
+    "@types/node": "26.6.5",
+    "@types/sanitize-html": "2.16.2",
+    "prettier": "3.7.4",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}

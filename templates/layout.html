@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="{{language}}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{title}}</title>
+    <meta name="description" content="{{description}}" />
+    <meta name="robots" content="{{robots}}" />
+    <link rel="canonical" href="{{canonical}}" />
+    <link rel="alternate" type="application/rss+xml" title="{{siteTitle}}" href="/rss.xml" />
+    <link rel="stylesheet" href="/styles/tokens.css" />
+    <link rel="icon" type="image/svg+xml" href="/assets/mark.svg" />
+    <link rel="stylesheet" href="/styles/site.css" />
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to content</a>
+    <header class="site-header">
+      <a class="brand" href="/">{{siteTitle}}<small>A little space to write</small></a>
+      <nav aria-label="Main navigation">
+        <a href="/blog/" {{writingCurrent}}>Writing</a>
+        <a href="/tags/" {{topicsCurrent}}>Topics</a>
+        <a href="/about/" {{aboutCurrent}}>About</a>
+      </nav>
+    </header>
+    <main id="content" tabindex="-1">{{body}}</main>
+    <footer class="site-footer">
+      <p>Words by {{author}}. Built with care, served as plain HTML.</p>
+      <a href="/rss.xml">Subscribe via RSS</a>
+    </footer>
+  </body>
+</html>

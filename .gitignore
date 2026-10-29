@@ -1,0 +1,8 @@
+node_modules/
+public/
+.anq-build-*/
+.anq-build.lock
+.anq-previous-*/
+test-results/
+.env
+.env.*

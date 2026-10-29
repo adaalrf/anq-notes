@@ -1,0 +1,10 @@
+node_modules
+public
+.git
+.env
+.env.*
+.anq-*
+test-results
+tests
+docs
+*.log
