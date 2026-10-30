@@ -27,5 +27,9 @@ Run `npm run check` (format, types, isolated build/preview tests and sample buil
 For browser/navigation changes run `npm run test:browser`; install Chromium with
 `npx playwright install chromium`, or set `CHROMIUM_EXECUTABLE` on NixOS. The
 browser checks use temporary fictional publications. Container changes also need
-`npm run test:container` with rootless Podman. Read [v1 scope](docs/V1.md) before
+`npm run test:container` with rootless Podman. Read the README scope before
 adding features. Keep screenshots fictional and preserve Git signing settings.
+
+For visual changes, use the local CSS tokens and preserve contrast, visible
+keyboard focus, readable errors and text labels for status. Colour alone must
+not convey state. Keep screenshots fictional.

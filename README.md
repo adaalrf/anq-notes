@@ -2,8 +2,7 @@
 
 A cloneable TypeScript starter for a small Markdown publication and static pages.
 It generates HTML, CSS, topic pages, RSS and a sitemap in `public/`. Visitors need
-no JavaScript, account or database. This is a clean v1 remake of the original
-ANQ Blog SSG, whose source and Git history stay preserved in the archive.
+no JavaScript, account or database.
 
 ![Starter writing page](docs/screenshots/writing-desktop.png)
 
@@ -163,23 +162,8 @@ filesystem and writable `/tmp`, drops capabilities, and removes its test contain
 The supplied production CSP supports local assets; keep images/fonts local.
 Do not deploy the source, credentials, node_modules or development preview server.
 
-See [v1 scope](docs/V1.md) and [case study](docs/CASE-STUDY.md).
-The current sample publication is live at https://notes.demo.adaalrf.dev through
-ANQ Publish. The current interface review is deployed and verified over public HTTPS.
-See [deployment evidence](docs/DEPLOYMENT.md). GitHub publication remains separate.
-
-## Editing pages and navigation
-
-Change page HTML in `src/pages/` and shared list controls in `src/components/`.
-Keep site-wide navigation and metadata in `templates/layout.html`; author writing
-in `content/`. `build.ts` coordinates these pieces and validates every generated
-internal link before replacing output. Generated sites remain plain HTML/CSS.
-
-Writing/Topics/About show the current section. Later listing pages include their
-page number in the browser title. Topic listings link back to all topics, and
-posts link to the adjacent published notes in the same deterministic date/slug
-order as the writing index. Drafts do not appear in these links. The keyboard skip
-link focuses the reading area. Local colour tokens and pagination size are unchanged.
+See [deployment](docs/DEPLOYMENT.md) for static hosting and container configuration.
+Try the [sample publication](https://notes.demo.adaalrf.dev).
 
 `SITE_URL=https://notes.example.com npm run build` overrides the canonical origin
 for a release without editing the starter configuration. Containers accept the

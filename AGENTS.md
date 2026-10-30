@@ -1,6 +1,6 @@
 # Working on ANQ Notes
 
-Read README.md and docs/V1.md. The archived original remains untouched. This is a
+Read README.md and CONTRIBUTING.md. This is a
 cloneable source project, not an npm CLI service. Keep the v1 source easy to read:
 content parsing, sanitized rendering, build orchestration and a local preview.
 Do not add a plugin framework, client bundle or external service speculatively.
