@@ -1,5 +1,7 @@
 # ANQ Notes
 
+[![Checks](https://github.com/adaalrf/anq-notes/actions/workflows/check.yml/badge.svg)](https://github.com/adaalrf/anq-notes/actions/workflows/check.yml)
+
 A cloneable TypeScript starter for a small Markdown publication and static pages.
 It generates HTML, CSS, topic pages, RSS and a sitemap in `public/`. Visitors need
 no JavaScript, account or database.
