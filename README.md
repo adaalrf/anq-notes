@@ -4,7 +4,9 @@
 
 A cloneable TypeScript starter for a small Markdown publication and static pages.
 It generates HTML, CSS, topic pages, RSS and a sitemap in `public/`. Visitors need
-no JavaScript, account or database.
+no JavaScript, account or database. The header stays available while reading,
+mobile pages include a return-to-top link, and colours follow the device’s
+light/dark preference.
 
 ![Starter writing page](docs/screenshots/writing-desktop.png)
 

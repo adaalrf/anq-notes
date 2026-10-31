@@ -1,3 +1,4 @@
+import { checkNavigationTheme } from './navigation-theme.js';
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
@@ -157,6 +158,7 @@ try {
   await scan.goto(origin + '/blog/a-small-visual-vocabulary/');
   await scan.screenshot({ path: 'test-results/post-mobile.png', fullPage: true });
   assert.deepEqual(errors, []);
+  await checkNavigationTheme(scan, origin, false);
   console.log(
     'Browser passed: JS-disabled navigation, post/topic pagination, Markdown/HTML pages, XML parsing, 404, mobile overflow and accessibility scans of six views.',
   );

@@ -261,3 +261,91 @@ main:focus {
   color: var(--color-muted);
   font-size: var(--text-small);
 }
+
+/* Keep the publication usable without browser JavaScript. */
+html {
+  scroll-padding-top: 140px;
+  scroll-behavior: smooth;
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding-block: 20px;
+}
+.skip {
+  position: fixed;
+  z-index: 40;
+}
+.back-to-top {
+  display: none;
+}
+@media (max-width: 600px) {
+  .site-header {
+    padding: 12px 20px;
+    gap: 0;
+  }
+  .site-header .brand {
+    font-size: 1.5rem;
+  }
+  .site-header .brand small {
+    display: none;
+  }
+  .site-header nav {
+    gap: 16px;
+  }
+  .site-header nav a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .back-to-top {
+    display: inline-flex;
+    position: fixed;
+    right: max(16px, env(safe-area-inset-right));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 30;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 8px 14px;
+    border-radius: 24px;
+    background: var(--color-brand);
+    color: var(--color-on-brand);
+    text-decoration: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+@media print {
+  .site-header,
+  .back-to-top,
+  .skip {
+    display: none;
+  }
+}
+
+/* Dark equivalents for component accents; the main palette lives in tokens.css. */
+@media screen and (prefers-color-scheme: dark) {
+  input,
+  select,
+  textarea {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+  }
+  ::placeholder {
+    color: var(--color-muted);
+    opacity: 1;
+  }
+  .primary {
+    color: var(--color-on-brand);
+  }
+  .sidebar,
+  .site-header,
+  aside {
+    --color-on-brand: #f2f7f5;
+  }
+}
