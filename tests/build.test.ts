@@ -257,3 +257,17 @@ test('link audit handles encoded paths/fragments and rejects missing alt/duplica
     /duplicate id/,
   );
 });
+
+test('external images fail validation before replacing the previous site', async () => {
+  const root = await fixture();
+  try {
+    await post(root, 'local');
+    await build(root, config);
+    const before = await snapshot(join(root, 'public'));
+    await post(root, 'external', {}, '![Example](https://elsewhere.example/picture.png)');
+    await assert.rejects(build(root, config), /external images/);
+    assert.deepEqual(await snapshot(join(root, 'public')), before);
+  } finally {
+    await cleanup(root);
+  }
+});

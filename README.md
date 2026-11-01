@@ -118,7 +118,7 @@ Update the layout navigation when adding/removing pages.
 ## Builds and errors
 
 A build validates metadata, URLs, output collisions, links/fragments, duplicate
-IDs and image alt attributes before publishing output. Generated paths, file
+IDs, image alt attributes and same-origin image sources before publishing output. Generated paths, file
 ordering and RSS dates are deterministic. RSS includes the latest 20 posts; the
 sitemap includes published pages, listings and topics, excluding the 404 page.
 
@@ -132,7 +132,8 @@ fallback. This is local build protection, not a production deployment transactio
 If a process crashes, confirm no build is running before removing the stale
 `.anq-build.lock`. Inspect leftover `.anq-build-*`/`.anq-previous-*` directories
 before recovery; the generator never silently adopts unmanaged output. Source
-and asset symlinks are rejected. External URLs are not fetched or checked.
+and asset symlinks are rejected. External links are not fetched or checked; external
+images are rejected because the supplied container permits only local images.
 
 ## Verify
 

@@ -9,6 +9,13 @@ export function checkLinks(files: Map<string, string | Buffer>, siteUrl: string)
       onopentag(name, attributes) {
         if (name === 'img' && !('alt' in attributes))
           throw new Error(`${file}: images need alt text (or alt="" when decorative).`);
+        if (name === 'img' && attributes.src) {
+          const image = new URL(attributes.src, siteUrl + '/');
+          if (image.origin !== siteUrl)
+            throw new Error(
+              `${file}: external images are blocked by the supplied CSP; copy the image into assets/.`,
+            );
+        }
         if (attributes.id) {
           if (found.has(attributes.id))
             throw new Error(`${file}: duplicate id "${attributes.id}".`);
