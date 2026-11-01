@@ -29,7 +29,7 @@ web server.
 ## Make it yours
 
 1. Edit `site.config.ts`: name, description, author and canonical HTTPS domain.
-2. Edit `content/pages/index.md` and the HTML about page.
+2. Edit `content/pages/index.md`, the HTML about page, and the sample attribution in `templates/layout.html`.
 3. Replace the fictional starter posts in `content/posts/`.
 4. Adjust `styles/tokens.css`, then `styles/site.css` for component/layout rules.
 5. Run `npm run check` and inspect the output.

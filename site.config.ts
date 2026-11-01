@@ -3,7 +3,7 @@ export default {
   title: 'ANQ Notes',
   description: 'Notes on making things, keeping them simple, and leaving a clear place to start.',
   url: 'https://example.com',
-  author: 'Anq Workshop',
+  author: 'ANQ Notes sample publication',
   language: 'en',
   postsPerPage: 4,
   indexable: false,
