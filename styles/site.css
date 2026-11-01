@@ -356,13 +356,14 @@ html {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  align-self: flex-start;
+  align-self: center;
   min-width: 44px;
   min-height: 44px;
   padding: 0;
   border: 0;
   background: transparent;
   color: var(--color-ink);
+  cursor: pointer;
 }
 .theme-control:hover:not(:disabled) {
   background: transparent;
