@@ -30,6 +30,7 @@ try {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await page.goto(origin);
+  await expect(page.getByRole('switch', { name: 'Dark mode' })).toBeHidden();
   await expect(
     page.getByRole('heading', { name: 'A notebook for things worth keeping.', exact: true }),
   ).toBeVisible();
@@ -132,7 +133,8 @@ try {
     '/404.html',
   ]) {
     await scan.goto(origin + route);
-    await expect(scan.locator('script')).toHaveCount(0);
+    await expect(scan.locator('script')).toHaveCount(1);
+    await expect(scan.locator('script')).toHaveAttribute('src', '/assets/theme.js');
     const result = await new AxeBuilder({ page: scan })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
       .analyze();

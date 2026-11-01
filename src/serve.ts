@@ -5,6 +5,7 @@ import { pathToFileURL } from 'node:url';
 import config from '../site.config.js';
 import { build } from './build.js';
 const types: Record<string, string> = {
+  '.js': 'text/javascript; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.xml': 'application/xml; charset=utf-8',

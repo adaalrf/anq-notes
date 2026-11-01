@@ -24,6 +24,7 @@ export async function fixture() {
     'styles/site.css',
     'templates/layout.html',
     'assets/mark.svg',
+    'assets/theme.js',
   ])
     await writeFile(join(root, file), await readFile(resolve(file)));
   await writeFile(
