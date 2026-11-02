@@ -17,7 +17,7 @@ export function document(meta: Record<string, unknown>, body = 'A short **note**
 }
 export async function fixture() {
   const root = await mkdtemp(join(tmpdir(), 'anq-ssg-'));
-  for (const dir of ['content/pages', 'content/posts', 'styles', 'templates', 'assets'])
+  for (const dir of ['content/pages', 'content/posts', 'styles', 'templates', 'assets/fonts'])
     await mkdir(join(root, dir), { recursive: true });
   for (const file of [
     'styles/tokens.css',
@@ -25,6 +25,7 @@ export async function fixture() {
     'templates/layout.html',
     'assets/mark.svg',
     'assets/theme.js',
+    'assets/fonts/source-serif-4.woff2',
   ])
     await writeFile(join(root, file), await readFile(resolve(file)));
   await writeFile(
