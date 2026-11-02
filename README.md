@@ -2,14 +2,28 @@
 
 [![Checks](https://github.com/adaalrf/anq-notes/actions/workflows/check.yml/badge.svg)](https://github.com/adaalrf/anq-notes/actions/workflows/check.yml)
 
-A cloneable TypeScript starter for a small Markdown publication and static pages.
-It generates HTML, CSS, topic pages, RSS and a sitemap in `public/`. Visitors need
-no JavaScript, account or database. The header stays available while reading,
-mobile pages include a return-to-top link, and colours follow the device’s
-light/dark preference. An optional appearance switch remembers an explicit choice
-in the browser; reading and navigation still work with JavaScript disabled.
+A TypeScript publication tool that turns Markdown and HTML into a reading site
+with topics, pagination and RSS. The output works without browser JavaScript;
+content and link validation happen before the previous successful build is replaced.
 
-![Starter writing page](docs/screenshots/writing-desktop.png)
+[Read the sample publication](https://notes.demo.adaalrf.dev) · [Case study](https://adaalrf.dev/work/anq-notes/) · [Source map](CONTRIBUTING.md)
+
+![Sample writing page](docs/screenshots/writing-desktop.png)
+
+## Review path
+
+- [Rendering](src/render.ts) handles sanitized content and heading links.
+- [Build orchestration](src/build.ts) validates the complete site before replacing output.
+- [Build regressions](tests/build.test.ts) check broken links, invalid content and preservation of the last good build.
+
+## How this project is developed
+
+The maintainer sets scope and design direction; AI coding agents write and revise
+implementation code. [Project rules](AGENTS.md) require escaped metadata, sanitized content
+and preservation of previous output on validation failure. Build fixtures and
+JavaScript-disabled browser checks provide evidence for those behaviors.
+
+The [initial public release](https://github.com/adaalrf/anq-notes/commit/6a9584a) is a squashed snapshot of pre-publication development; subsequent changes are recorded incrementally.
 
 ## Start locally
 
@@ -154,7 +168,7 @@ Deploy the **contents of `public/`** to a static host. Configure its 404 handler
 to serve `404.html` with status 404. No Node process or database is required by
 that output.
 
-An optional image follows the existing `anq-publish` static-site contract:
+An optional container image serves the generated site on port 8080:
 
 ```sh
 podman build --build-arg SITE_URL=https://notes.example.com -t localhost/anq-notes:v1 .
