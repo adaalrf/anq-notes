@@ -20,8 +20,9 @@ content and link validation happen before the previous successful build is repla
 
 The maintainer sets scope and design direction; AI coding agents write and revise
 implementation code. [Project rules](AGENTS.md) require escaped metadata, sanitized content
-and preservation of previous output on validation failure. Build fixtures and
-JavaScript-disabled browser checks provide evidence for those behaviors.
+and preservation of previous output on validation failure. Build fixtures check
+validation and output preservation; browser checks exercise the generated site
+with JavaScript disabled.
 
 The [initial public release](https://github.com/adaalrf/anq-notes/commit/6a9584a) is a squashed snapshot of pre-publication development; subsequent changes are recorded incrementally.
 
