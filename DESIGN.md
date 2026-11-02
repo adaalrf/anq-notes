@@ -11,6 +11,8 @@ ANQ Notes follows the ANQ family system.
 - **Density:** generous. Body `--text-md`, prose line height 1.8.
 - **Signature:** dates in the margin column beside a ruled index of posts. Below
   760px the date moves above its entry.
+- **JavaScript:** required to work without it. Pages are static HTML; the
+  theme switch is the only script and is an enhancement.
 
 `styles/tokens.css` owns the contract, the family block and these settings;
 `styles/site.css` owns layout and components. Keep the class names the tests
@@ -42,12 +44,17 @@ Core rules, identical in every ANQ project:
 4. **Labels** in mono capitals: `--text-xs`, `0.08em`, `--color-muted`. Number
    them only when the order is real.
 5. **Rules before boxes.** 1px `--color-line` hairlines. Three surfaces only:
-   Panel, Card, Frame. No shadows except the back-to-top button; no coloured side
-   bars.
+   Panel, Card, Frame. A shadow only where an element floats over content it
+   would otherwise blend into, such as the back-to-top button; never for
+   decoration. No coloured side bars.
 6. **One scale.** `--text-*`, `--space-*`, `--radius-frame`, `--radius-small`. No
    literal px except 1px borders, component geometry and breakpoints.
 7. **Same contract.** Keep the shared token names and the family block in
    `tokens.css`; change the look through the palette and the settings above.
 8. **Access** (never a departure): 4.5:1 text in both themes, a solid 3px
    `--color-focus` outline, 44px targets, no motion under
-   `prefers-reduced-motion`, usable without JavaScript.
+   `prefers-reduced-motion`.
+
+Family default: use JavaScript where it earns its place, and load nothing the
+page does not need. Each project's settings say whether it must, or should, work
+without JavaScript.
