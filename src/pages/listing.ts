@@ -12,7 +12,7 @@ export function listingPage(
   topic: boolean,
 ) {
   return /* HTML */ ` ${topic ? '<a class="back" href="/tags/">← All topics</a>' : ''}
-  ${heading(title, description, 'From the notebook')}
+  ${heading(title, description)}
   ${items.length ? cards(items) : '<p class="panel">No published posts yet.</p>'}
   ${pagination(page, count, url)}`;
 }

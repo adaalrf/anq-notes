@@ -115,7 +115,7 @@ export async function build(root: string, rawConfig: unknown) {
     for (const page of pages) {
       if (['blog', 'tags', '404', 'assets', 'styles'].includes(page.slug))
         throw new Error(`${page.source}: reserved page slug "${page.slug}".`);
-      html(page.title, page.description, page.url, contentPage(page, config.title));
+      html(page.title, page.description, page.url, contentPage(page));
     }
     for (const [index, post] of posts.entries()) {
       html(
