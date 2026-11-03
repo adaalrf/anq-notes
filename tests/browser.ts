@@ -198,6 +198,16 @@ try {
     assert.ok(Math.abs(gaps.offCentre) < 1, `${path} ${JSON.stringify(gaps)}`);
     assert.ok(Math.abs(gaps.offRule) < 1, `${path} ${JSON.stringify(gaps)}`);
   }
+  // Short pages keep the footer at the bottom of the screen.
+  await scan.setViewportSize({ width: 1556, height: 1400 });
+  for (const path of ['/tags/', '/about/', '/missing/']) {
+    await scan.goto(origin + path);
+    const under = await scan.evaluate(
+      () => innerHeight - document.querySelector('.site-footer')!.getBoundingClientRect().bottom,
+    );
+    assert.ok(Math.abs(under) < 2, `${path} leaves ${under}px under the footer`);
+  }
+  await scan.setViewportSize({ width: 390, height: 844 });
   await scan.goto(`${origin}/blog/`);
   // The Top button stays out of the way until the reader has scrolled.
   const top = scan.getByRole('link', { name: 'Back to top', exact: true });

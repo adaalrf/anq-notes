@@ -7,7 +7,11 @@ html {
   /* Short and long pages keep the same width, so nothing shifts between them. */
   scrollbar-gutter: stable;
 }
+/* A column the height of the screen, so main can hold the footer at the bottom. */
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
   margin: 0;
   background: var(--color-canvas);
   color: var(--color-ink);
@@ -102,6 +106,7 @@ h2 a:hover {
   align-items: center;
   gap: var(--space-5);
   max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure) + 2 * var(--space-5));
+  width: 100%;
   margin: 0 auto;
   padding: var(--space-5);
   background: var(--color-canvas);
@@ -141,9 +146,10 @@ h2 a:hover {
 /* The page: a margin column for dates and labels beside a reading measure. */
 main {
   max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure) + 2 * var(--space-5));
-  margin: auto;
-  padding: var(--space-8) var(--space-5) var(--space-9);
-  min-height: 65vh;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-5) var(--space-6);
+  width: 100%;
+  flex: 1;
 }
 main > * {
   margin-left: calc(var(--width-margin) + var(--space-6));
@@ -321,10 +327,9 @@ main > .topic-grid {
 }
 
 /* Navigation between pages */
-/* Pagination ends the page, with the same space above and below it. */
+/* Pagination ends the page, with the same space above and below it, so the footer isn't pinned. */
 main:has(> .pagination:last-child) {
-  min-height: 0;
-  padding-bottom: var(--space-6);
+  flex: none;
 }
 /* Equal outer columns keep the page label centred with one link or two. */
 main > .pagination {
@@ -368,7 +373,8 @@ main > .pagination {
 
 .site-footer {
   max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure) + 2 * var(--space-5));
-  margin: auto;
+  width: 100%;
+  margin: 0 auto;
   border-top: 1px solid var(--color-line);
   padding: var(--space-5);
   color: var(--color-muted);
@@ -587,6 +593,10 @@ main > .pagination {
   }
 }
 @media print {
+  body {
+    display: block;
+    min-height: 0;
+  }
   .site-header,
   .back-to-top,
   .skip,
