@@ -218,6 +218,14 @@ try {
       }),
     );
     assert.deepEqual(new Set(edges.map(String)).size, 1, JSON.stringify(edges));
+    await scan.goto(`${origin}/blog/one-build-many-static-hosts/`);
+    const postEdges = await scan.evaluate(() =>
+      ['.site-header', '.adjacent-posts', '.site-footer'].map((selector) => {
+        const { left, right } = document.querySelector(selector)!.getBoundingClientRect();
+        return [Math.round(left), Math.round(right)];
+      }),
+    );
+    assert.deepEqual(new Set(postEdges.map(String)).size, 1, JSON.stringify(postEdges));
   }
   // The Top button stays out of the way until the reader has scrolled.
   const top = scan.getByRole('link', { name: 'Back to top', exact: true });

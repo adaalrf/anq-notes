@@ -329,7 +329,8 @@ main > .topic-grid {
 
 /* Navigation between pages */
 /* Equal outer columns keep the page label centred with one link or two. */
-main > .pagination {
+main > .pagination,
+main > .adjacent-posts {
   margin-left: 0;
 }
 .pagination {
