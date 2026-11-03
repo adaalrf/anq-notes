@@ -191,10 +191,12 @@ try {
         above: nav.top - above,
         below: below - nav.bottom,
         offCentre: middle.left + middle.width / 2 - (nav.left + nav.width / 2),
+        offRule: nav.left - posts.at(-1)!.getBoundingClientRect().left,
       };
     });
     assert.ok(Math.abs(gaps.above - gaps.below) < 2, `${path} ${JSON.stringify(gaps)}`);
     assert.ok(Math.abs(gaps.offCentre) < 1, `${path} ${JSON.stringify(gaps)}`);
+    assert.ok(Math.abs(gaps.offRule) < 1, `${path} ${JSON.stringify(gaps)}`);
   }
   await scan.goto(`${origin}/blog/`);
   // The Top button stays out of the way until the reader has scrolled.

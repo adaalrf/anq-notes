@@ -9,8 +9,8 @@ ANQ Notes follows the ANQ family system.
 - **Palette:** walnut ink (`--color-brand` #78532c) on warm paper
   (`--color-canvas` #faf7f1).
 - **Density:** generous. Body `--text-md`, prose line height 1.8.
-- **Signature:** dates in the margin column beside a ruled index of posts. Below
-  760px the date moves above its entry.
+- **Signature:** dates in the margin column beside a ruled index of posts, and
+  post counts in the same place on Topics. Below 760px they move above their entry.
 - **JavaScript:** required to work without it. Pages are static HTML; the
   theme switch is the only script and is an enhancement.
 
