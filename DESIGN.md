@@ -12,7 +12,7 @@ ANQ Notes follows the ANQ family system.
 - **Signature:** dates in the margin column beside a ruled index of posts, and
   post counts in the same place on Topics. Below 760px they move above their entry.
   Posts and pages have no margin column: one `--width-reading` (44rem) block
-  centred under the rules, with `--text-lg` body text and a post's date beside
+  centred under the rules, with `--text-lg` body text and a post's date above
   its tags.
 - **JavaScript:** required to work without it. Pages are static HTML; the
   theme switch is the only script and is an enhancement.

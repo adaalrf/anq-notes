@@ -295,18 +295,18 @@ th {
   color: var(--color-brand);
 }
 /* Posts and pages have no margin column: one centred block, inset evenly from the rules, whose
-   larger text keeps lines comfortable to read. The date joins the tags. */
+   larger text keeps lines comfortable to read. The date sits above the tags. */
 main > .reading-heading {
   display: block;
   max-width: var(--width-reading);
   margin-inline: auto;
 }
 .post-meta {
-  margin-top: var(--space-5);
+  margin-top: var(--space-4);
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--space-2) var(--space-4);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
 }
 .post-meta .eyebrow,
 .post-meta .tags {
