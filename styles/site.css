@@ -294,11 +294,11 @@ th {
   border-color: var(--color-brand);
   color: var(--color-brand);
 }
-/* A post has no margin column: one centred block, inset evenly from the rules, whose
+/* Posts and pages have no margin column: one centred block, inset evenly from the rules, whose
    larger text keeps lines comfortable to read. The date joins the tags. */
-main > .post-heading {
+main > .reading-heading {
   display: block;
-  max-width: var(--width-post);
+  max-width: var(--width-reading);
   margin-inline: auto;
 }
 .post-meta {
@@ -312,12 +312,12 @@ main > .post-heading {
 .post-meta .tags {
   margin: 0;
 }
-main > .post-body {
-  max-width: var(--width-post);
+main > .reading-body {
+  max-width: var(--width-reading);
   margin-inline: auto;
 }
 @media (min-width: 761px) {
-  .post-body {
+  .reading-body {
     font-size: var(--text-lg);
   }
 }
