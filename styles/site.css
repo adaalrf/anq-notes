@@ -363,8 +363,49 @@ th {
   margin: 0;
   max-width: var(--width-measure);
 }
+/* The family's 44px target: an invisible hit area, so small links keep their layout. */
+.brand,
+.post-card h2 a,
+.read-more,
+.back,
+.tag,
+.pagination a,
+.site-footer a {
+  position: relative;
+}
+.brand::after,
+.post-card h2 a::after,
+.read-more::after,
+.back::after,
+.tag::after,
+.pagination a::after,
+.site-footer a::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  height: var(--size-touch);
+  transform: translateY(-50%);
+}
 .back-to-top {
   display: none;
+}
+/* No script here: browsers with scroll timelines keep it out of the way at the top. */
+@keyframes back-to-top-reveal {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+@supports (animation-timeline: scroll()) {
+  .back-to-top {
+    animation: back-to-top-reveal linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 40vh;
+  }
 }
 
 /* Progressive appearance control; ordinary navigation needs no script. */

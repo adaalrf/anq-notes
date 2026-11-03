@@ -156,6 +156,32 @@ try {
   await scan.goto(origin + '/blog/');
   await scan.screenshot({ path: 'test-results/writing-desktop.png', fullPage: true });
   await scan.setViewportSize({ width: 390, height: 844 });
+  await scan.goto(`${origin}/blog/`);
+  // Standalone controls meet the family's 44px target; links inside a sentence are exempt.
+  assert.deepEqual(
+    await scan.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>('main a, header a, footer a')]
+        .filter((control) => {
+          const sentence = control.closest('p, li');
+          return !sentence || sentence.textContent!.trim() === control.textContent!.trim();
+        })
+        .filter((control) => control.getClientRects().length)
+        .filter(
+          (control) =>
+            Math.max(
+              control.getBoundingClientRect().height,
+              parseFloat(getComputedStyle(control, '::after').height) || 0,
+            ) < 44,
+        )
+        .map((control) => control.className + ':' + control.textContent!.trim().slice(0, 24)),
+    ),
+    [],
+  );
+  // The Top button stays out of the way until the reader has scrolled.
+  const top = scan.getByRole('link', { name: 'Back to top', exact: true });
+  await expect(top).toBeHidden();
+  await scan.evaluate(() => window.scrollTo({ top: 600, behavior: 'instant' }));
+  await expect(top).toBeVisible();
   await scan.screenshot({ path: 'test-results/writing-mobile.png', fullPage: true });
   await scan.goto(origin + '/blog/a-small-visual-vocabulary/');
   await scan.screenshot({ path: 'test-results/post-mobile.png', fullPage: true });
