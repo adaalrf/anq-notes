@@ -185,9 +185,16 @@ try {
       const posts = [...document.querySelectorAll('.post-card')];
       const above = posts.at(-1)!.getBoundingClientRect().bottom;
       const below = document.querySelector('.site-footer')!.getBoundingClientRect().top;
-      return { above: nav.top - above, below: below - nav.bottom };
+      const label = document.querySelector('.pagination > :nth-child(2)')!;
+      const middle = label.getBoundingClientRect();
+      return {
+        above: nav.top - above,
+        below: below - nav.bottom,
+        offCentre: middle.left + middle.width / 2 - (nav.left + nav.width / 2),
+      };
     });
     assert.ok(Math.abs(gaps.above - gaps.below) < 2, `${path} ${JSON.stringify(gaps)}`);
+    assert.ok(Math.abs(gaps.offCentre) < 1, `${path} ${JSON.stringify(gaps)}`);
   }
   await scan.goto(`${origin}/blog/`);
   // The Top button stays out of the way until the reader has scrolled.

@@ -102,9 +102,7 @@ h2 a:hover {
   max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure) + 2 * var(--space-5));
   margin: 0 auto;
   padding: var(--space-5);
-  background: color-mix(in srgb, var(--color-canvas) 95%, transparent);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  background: var(--color-canvas);
   border-bottom: 1px solid var(--color-line);
 }
 .brand {
@@ -313,13 +311,17 @@ main:has(> .pagination:last-child) {
   min-height: 0;
   padding-bottom: var(--space-6);
 }
+/* Equal outer columns keep the page label centred with one link or two. */
 .pagination {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: var(--space-4);
   margin-top: var(--space-6);
   color: var(--color-muted);
+}
+.pagination > :last-child {
+  justify-self: end;
 }
 .adjacent-posts {
   display: grid;
