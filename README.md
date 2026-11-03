@@ -28,7 +28,7 @@ The [initial public release](https://github.com/adaalrf/anq-notes/commit/6a9584a
 
 ## Start locally
 
-Requires Node 24+ and npm. From this directory:
+Requires Node 26+ and npm. From this directory:
 
 ```sh
 npm ci
@@ -176,7 +176,7 @@ podman build --build-arg SITE_URL=https://notes.example.com -t localhost/anq-not
 npm run test:container
 ```
 
-The image builds with pinned Node 24 and serves through pinned Caddy as UID 1000
+The image builds with pinned Node 26 and serves through pinned Caddy as UID 1000
 on port 8080. `/healthz` returns 200; no app migrations or writable data volume
 are needed. The container check uses free loopback port 18087, a read-only
 filesystem and writable `/tmp`, drops capabilities, and removes its test container.

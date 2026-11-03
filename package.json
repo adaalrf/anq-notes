@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=24"
+    "node": ">=26"
   },
   "scripts": {
     "build": "tsx src/cli.ts",
@@ -18,8 +18,8 @@
     "test:container": "tsx tests/container.ts"
   },
   "dependencies": {
-    "htmlparser2": "10.1.0",
-    "marked": "18.1.2",
+    "htmlparser2": "12.0.0",
+    "marked": "18.1.3",
     "sanitize-html": "2.18.1",
     "yaml": "2.9.1",
     "zod": "4.6.7"
@@ -27,9 +27,9 @@
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
     "@playwright/test": "1.64.1",
-    "@types/node": "26.6.5",
+    "@types/node": "26.6.6",
     "@types/sanitize-html": "2.16.2",
-    "prettier": "3.7.4",
+    "prettier": "3.9.10",
     "tsx": "4.23.15",
     "typescript": "7.0.2"
   }
