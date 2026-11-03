@@ -1,6 +1,6 @@
 # Developing ANQ Notes
 
-With Node.js 24+ and npm, run `npm ci`, then `npm run dev`. Open
+With Node.js 26+ and npm, run `npm ci`, then `npm run dev`. Open
 http://localhost:5176. The preview builds once; run `npm run build` after editing
 and refresh. It is a cloneable publication project, not an installed npm CLI.
 
