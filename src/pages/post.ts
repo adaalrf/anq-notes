@@ -8,8 +8,7 @@ export function postPage(post: Document, newer?: Document, older?: Document) {
     item
       ? `<a href="${item.url}"><small>${direction}</small><span>${escape(item.title)}</span></a>`
       : '<span></span>';
-  return /* HTML */ ` <a class="back" href="/blog/">← All writing</a>
-    <header class="page-heading">
+  return /* HTML */ ` <header class="page-heading">
       <p class="eyebrow"><time datetime="${post.date}">${dateLabel(post.date!)}</time></p>
       <h1>${escape(post.title)}</h1>
       <p class="muted">${escape(post.description)}</p>

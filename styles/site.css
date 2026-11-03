@@ -80,7 +80,6 @@ h2 a:hover {
 }
 .site-header nav,
 .read-more,
-.back,
 .pagination,
 .tag,
 .site-footer > a {
@@ -309,9 +308,10 @@ th {
 }
 
 /* Navigation between pages */
-.back {
-  display: inline-block;
-  margin-bottom: var(--space-6);
+/* Pagination ends the page, with the same space above and below it. */
+main:has(> .pagination:last-child) {
+  min-height: 0;
+  padding-bottom: var(--space-6);
 }
 .pagination {
   display: flex;
@@ -367,7 +367,6 @@ th {
 .brand,
 .post-card h2 a,
 .read-more,
-.back,
 .tag,
 .pagination a,
 .site-footer a {
@@ -376,7 +375,6 @@ th {
 .brand::after,
 .post-card h2 a::after,
 .read-more::after,
-.back::after,
 .tag::after,
 .pagination a::after,
 .site-footer a::after {

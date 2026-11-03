@@ -177,6 +177,19 @@ try {
     ),
     [],
   );
+  // Pagination sits evenly between the last post's rule and the footer.
+  for (const path of ['/blog/', '/blog/page/2/']) {
+    await scan.goto(origin + path);
+    const gaps = await scan.evaluate(() => {
+      const nav = document.querySelector('.pagination')!.getBoundingClientRect();
+      const posts = [...document.querySelectorAll('.post-card')];
+      const above = posts.at(-1)!.getBoundingClientRect().bottom;
+      const below = document.querySelector('.site-footer')!.getBoundingClientRect().top;
+      return { above: nav.top - above, below: below - nav.bottom };
+    });
+    assert.ok(Math.abs(gaps.above - gaps.below) < 2, `${path} ${JSON.stringify(gaps)}`);
+  }
+  await scan.goto(`${origin}/blog/`);
   // The Top button stays out of the way until the reader has scrolled.
   const top = scan.getByRole('link', { name: 'Back to top', exact: true });
   await expect(top).toBeHidden();
