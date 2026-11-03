@@ -8,13 +8,15 @@ export function postPage(post: Document, newer?: Document, older?: Document) {
     item
       ? `<a href="${item.url}"><small>${direction}</small><span>${escape(item.title)}</span></a>`
       : '<span></span>';
-  return /* HTML */ ` <header class="page-heading">
-      <p class="eyebrow"><time datetime="${post.date}">${dateLabel(post.date!)}</time></p>
+  return /* HTML */ ` <header class="page-heading post-heading">
       <h1>${escape(post.title)}</h1>
       <p class="muted">${escape(post.description)}</p>
-      ${tags ? `<nav class="tags" aria-label="Post tags">${tags}</nav>` : ''}
+      <div class="post-meta">
+        <p class="eyebrow"><time datetime="${post.date}">${dateLabel(post.date!)}</time></p>
+        ${tags ? `<nav class="tags" aria-label="Post tags">${tags}</nav>` : ''}
+      </div>
     </header>
-    <article class="prose">${post.html}</article>
+    <article class="prose post-body">${post.html}</article>
     ${
       newer || older
         ? `<nav class="adjacent-posts" aria-label="More writing">${adjacent(newer, 'Newer note')}${adjacent(older, 'Older note')}</nav>`

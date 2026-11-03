@@ -226,6 +226,19 @@ try {
       ),
     );
     assert.ok(Math.abs(widths[0] - widths[1]) < 1, JSON.stringify(widths));
+    // Posts use the full content width, and their title sits where every page's title does.
+    const post = await scan.evaluate(() => ({
+      title: document.querySelector('h1')!.getBoundingClientRect().top,
+      body: document.querySelector('.prose')!.getBoundingClientRect().left,
+      rule: document.querySelector('.adjacent-posts')!.getBoundingClientRect().left,
+    }));
+    assert.ok(Math.abs(post.body - post.rule) < 1, JSON.stringify(post));
+    await scan.goto(`${origin}/about/`);
+    const pageTitle = await scan.evaluate(
+      () => document.querySelector('h1')!.getBoundingClientRect().top,
+    );
+    assert.ok(Math.abs(post.title - pageTitle) < 1, JSON.stringify({ ...post, pageTitle }));
+    await scan.goto(`${origin}/blog/one-build-many-static-hosts/`);
     const postEdges = await scan.evaluate(() =>
       ['.site-header', '.adjacent-posts', '.site-footer'].map((selector) => {
         const { left, right } = document.querySelector(selector)!.getBoundingClientRect();

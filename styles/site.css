@@ -294,6 +294,32 @@ th {
   border-color: var(--color-brand);
   color: var(--color-brand);
 }
+/* A post has no margin column: it takes the full content width, and larger text keeps
+   the lines comfortable to read. The date joins the tags. */
+main > .post-heading {
+  display: block;
+}
+.post-meta {
+  margin-top: var(--space-5);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+}
+.post-meta .eyebrow,
+.post-meta .tags {
+  margin: 0;
+}
+main > .post-body {
+  margin-left: 0;
+  max-width: none;
+}
+@media (min-width: 761px) {
+  .post-body {
+    font-size: var(--text-lg);
+  }
+}
+
 /* Topics follow the writing index: a rule per row, the count where a date would sit. */
 main > .topic-grid {
   margin-left: 0;

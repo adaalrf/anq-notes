@@ -11,6 +11,8 @@ ANQ Notes follows the ANQ family system.
 - **Density:** generous. Body `--text-md`, prose line height 1.8.
 - **Signature:** dates in the margin column beside a ruled index of posts, and
   post counts in the same place on Topics. Below 760px they move above their entry.
+  A post has no margin column: it takes the full content width with
+  `--text-lg` body text, and its date sits with its tags.
 - **JavaScript:** required to work without it. Pages are static HTML; the
   theme switch is the only script and is an enhancement.
 
