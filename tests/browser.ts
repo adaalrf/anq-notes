@@ -200,15 +200,25 @@ try {
   }
   // Short pages keep the footer at the bottom of the screen.
   await scan.setViewportSize({ width: 1556, height: 1400 });
-  for (const path of ['/tags/', '/about/', '/missing/']) {
+  for (const path of ['/tags/', '/about/', '/missing/', '/blog/page/2/']) {
     await scan.goto(origin + path);
     const under = await scan.evaluate(
       () => innerHeight - document.querySelector('.site-footer')!.getBoundingClientRect().bottom,
     );
     assert.ok(Math.abs(under) < 2, `${path} leaves ${under}px under the footer`);
   }
-  await scan.setViewportSize({ width: 390, height: 844 });
-  await scan.goto(`${origin}/blog/`);
+  // Every rule on the page starts and ends with the content.
+  for (const width of [1556, 390]) {
+    await scan.setViewportSize({ width, height: 844 });
+    await scan.goto(`${origin}/blog/`);
+    const edges = await scan.evaluate(() =>
+      ['.site-header', '.post-card', '.pagination', '.site-footer'].map((selector) => {
+        const { left, right } = document.querySelector(selector)!.getBoundingClientRect();
+        return [Math.round(left), Math.round(right)];
+      }),
+    );
+    assert.deepEqual(new Set(edges.map(String)).size, 1, JSON.stringify(edges));
+  }
   // The Top button stays out of the way until the reader has scrolled.
   const top = scan.getByRole('link', { name: 'Back to top', exact: true });
   await expect(top).toBeHidden();

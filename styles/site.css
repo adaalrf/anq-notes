@@ -105,10 +105,11 @@ h2 a:hover {
   display: flex;
   align-items: center;
   gap: var(--space-5);
-  max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure) + 2 * var(--space-5));
-  width: 100%;
+  /* The masthead and footer rules end where the content does. */
+  width: calc(100% - 2 * var(--space-5));
+  max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure));
   margin: 0 auto;
-  padding: var(--space-5);
+  padding: var(--space-5) 0;
   background: var(--color-canvas);
   border-bottom: 1px solid var(--color-line);
 }
@@ -327,10 +328,6 @@ main > .topic-grid {
 }
 
 /* Navigation between pages */
-/* Pagination ends the page, with the same space above and below it, so the footer isn't pinned. */
-main:has(> .pagination:last-child) {
-  flex: none;
-}
 /* Equal outer columns keep the page label centred with one link or two. */
 main > .pagination {
   margin-left: 0;
@@ -372,11 +369,11 @@ main > .pagination {
 }
 
 .site-footer {
-  max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure) + 2 * var(--space-5));
-  width: 100%;
+  width: calc(100% - 2 * var(--space-5));
+  max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure));
   margin: 0 auto;
   border-top: 1px solid var(--color-line);
-  padding: var(--space-5);
+  padding: var(--space-5) 0;
   color: var(--color-muted);
   font-size: var(--text-sm);
   display: flex;
@@ -528,7 +525,7 @@ main > .pagination {
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--size-touch);
     gap: 0 var(--space-3);
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-3) 0;
   }
   .site-header .brand small {
     display: none;
