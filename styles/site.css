@@ -294,10 +294,12 @@ th {
   border-color: var(--color-brand);
   color: var(--color-brand);
 }
-/* A post has no margin column: it takes the full content width, and larger text keeps
-   the lines comfortable to read. The date joins the tags. */
+/* A post has no margin column: one centred block, inset evenly from the rules, whose
+   larger text keeps lines comfortable to read. The date joins the tags. */
 main > .post-heading {
   display: block;
+  max-width: var(--width-post);
+  margin-inline: auto;
 }
 .post-meta {
   margin-top: var(--space-5);
@@ -311,8 +313,8 @@ main > .post-heading {
   margin: 0;
 }
 main > .post-body {
-  margin-left: 0;
-  max-width: none;
+  max-width: var(--width-post);
+  margin-inline: auto;
 }
 @media (min-width: 761px) {
   .post-body {

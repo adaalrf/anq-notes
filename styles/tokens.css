@@ -136,5 +136,6 @@
 /* Notes settings: warm paper, a reading column, generous space, dates in the margin. */
 :root {
   --width-measure: 38rem;
+  --width-post: 44rem;
   --width-margin: 8rem;
 }

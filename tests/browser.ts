@@ -226,13 +226,20 @@ try {
       ),
     );
     assert.ok(Math.abs(widths[0] - widths[1]) < 1, JSON.stringify(widths));
-    // Posts use the full content width, and their title sits where every page's title does.
-    const post = await scan.evaluate(() => ({
-      title: document.querySelector('h1')!.getBoundingClientRect().top,
-      body: document.querySelector('.prose')!.getBoundingClientRect().left,
-      rule: document.querySelector('.adjacent-posts')!.getBoundingClientRect().left,
-    }));
-    assert.ok(Math.abs(post.body - post.rule) < 1, JSON.stringify(post));
+    // A post is one block centred under the rules, and its title sits where every page's does.
+    const post = await scan.evaluate(() => {
+      const rule = document.querySelector('.adjacent-posts')!.getBoundingClientRect();
+      const body = document.querySelector('.prose')!.getBoundingClientRect();
+      const heading = document.querySelector('h1')!.getBoundingClientRect();
+      return {
+        title: heading.top,
+        left: body.left - rule.left,
+        right: rule.right - body.right,
+        titleLeft: heading.left - body.left,
+      };
+    });
+    assert.ok(Math.abs(post.left - post.right) < 1, JSON.stringify(post));
+    assert.ok(Math.abs(post.titleLeft) < 1, JSON.stringify(post));
     await scan.goto(`${origin}/about/`);
     const pageTitle = await scan.evaluate(
       () => document.querySelector('h1')!.getBoundingClientRect().top,
