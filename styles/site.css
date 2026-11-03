@@ -256,10 +256,11 @@ pre code {
   background: none;
   padding: 0;
 }
-table {
-  display: block;
-  max-width: 100%;
+.table-scroll {
   overflow-x: auto;
+}
+table {
+  width: 100%;
   border-collapse: collapse;
   font-size: var(--text-base);
 }

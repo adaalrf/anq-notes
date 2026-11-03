@@ -219,6 +219,13 @@ try {
     );
     assert.deepEqual(new Set(edges.map(String)).size, 1, JSON.stringify(edges));
     await scan.goto(`${origin}/blog/one-build-many-static-hosts/`);
+    // Tables fill the text column.
+    const widths = await scan.evaluate(() =>
+      ['.prose', '.prose tr'].map(
+        (selector) => document.querySelector(selector)!.getBoundingClientRect().width,
+      ),
+    );
+    assert.ok(Math.abs(widths[0] - widths[1]) < 1, JSON.stringify(widths));
     const postEdges = await scan.evaluate(() =>
       ['.site-header', '.adjacent-posts', '.site-footer'].map((selector) => {
         const { left, right } = document.querySelector(selector)!.getBoundingClientRect();
