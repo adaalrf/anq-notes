@@ -16,7 +16,9 @@ export function postPage(post: Document, newer?: Document, older?: Document) {
       ${tags ? `<nav class="tags" aria-label="Post tags">${tags}</nav>` : ''}
     </header>
     <article class="prose">${post.html}</article>
-    ${newer || older
-      ? `<nav class="adjacent-posts" aria-label="More writing">${adjacent(newer, 'Newer note')}${adjacent(older, 'Older note')}</nav>`
-      : ''}`;
+    ${
+      newer || older
+        ? `<nav class="adjacent-posts" aria-label="More writing">${adjacent(newer, 'Newer note')}${adjacent(older, 'Older note')}</nav>`
+        : ''
+    }`;
 }
