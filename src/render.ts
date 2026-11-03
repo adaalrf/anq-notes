@@ -8,7 +8,7 @@ export const escape = (value: string) =>
     (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!,
   );
 export function cleanHtml(html: string) {
-  return sanitize(html, {
+  const clean = sanitize(html, {
     allowedTags: [
       ...sanitize.defaults.allowedTags,
       'img',
@@ -33,7 +33,12 @@ export function cleanHtml(html: string) {
     allowedSchemesByTag: { img: ['http', 'https'] },
     allowProtocolRelative: false,
   });
+  // A wrapper scrolls wide tables on narrow screens, so the table itself can fill the column.
+  return clean
+    .replaceAll('<table', '<div class="table-scroll"><table')
+    .replaceAll('</table>', '</table></div>');
 }
+
 export function markdown(body: string) {
   const headings = new Set<string>();
   const parser = new Marked({

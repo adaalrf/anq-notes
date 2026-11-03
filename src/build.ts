@@ -140,7 +140,6 @@ export async function build(root: string, rawConfig: unknown) {
             page,
             count,
             url,
-            base.startsWith('/tags/'),
           ),
         );
     };

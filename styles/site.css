@@ -4,8 +4,14 @@
 html {
   scroll-padding-top: 7rem;
   scroll-behavior: smooth;
+  /* Short and long pages keep the same width, so nothing shifts between them. */
+  scrollbar-gutter: stable;
 }
+/* A column the height of the screen, so main can hold the footer at the bottom. */
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
   margin: 0;
   background: var(--color-canvas);
   color: var(--color-ink);
@@ -80,7 +86,6 @@ h2 a:hover {
 }
 .site-header nav,
 .read-more,
-.back,
 .pagination,
 .tag,
 .site-footer > a {
@@ -100,12 +105,12 @@ h2 a:hover {
   display: flex;
   align-items: center;
   gap: var(--space-5);
-  max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure) + 2 * var(--space-5));
+  /* The masthead and footer rules end where the content does. */
+  width: calc(100% - 2 * var(--space-5));
+  max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure));
   margin: 0 auto;
-  padding: var(--space-5);
-  background: color-mix(in srgb, var(--color-canvas) 95%, transparent);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+  padding: var(--space-5) 0;
+  background: var(--color-canvas);
   border-bottom: 1px solid var(--color-line);
 }
 .brand {
@@ -142,9 +147,10 @@ h2 a:hover {
 /* The page: a margin column for dates and labels beside a reading measure. */
 main {
   max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure) + 2 * var(--space-5));
-  margin: auto;
-  padding: var(--space-8) var(--space-5) var(--space-9);
-  min-height: 65vh;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-5) var(--space-6);
+  width: 100%;
+  flex: 1;
 }
 main > * {
   margin-left: calc(var(--width-margin) + var(--space-6));
@@ -250,10 +256,11 @@ pre code {
   background: none;
   padding: 0;
 }
-table {
-  display: block;
-  max-width: 100%;
+.table-scroll {
   overflow-x: auto;
+}
+table {
+  width: 100%;
   border-collapse: collapse;
   font-size: var(--text-base);
 }
@@ -287,39 +294,84 @@ th {
   border-color: var(--color-brand);
   color: var(--color-brand);
 }
-.topic-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-4);
+/* Posts and pages have no margin column: one centred block, inset evenly from the rules, whose
+   larger text keeps lines comfortable to read. The date sits above the tags. */
+main > .reading-heading {
+  display: block;
+  max-width: var(--width-reading);
+  margin-inline: auto;
 }
-.topic {
+.post-meta {
+  margin-top: var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+.post-meta .eyebrow,
+.post-meta .tags {
   margin: 0;
+}
+main > .reading-body {
+  max-width: var(--width-reading);
+  margin-inline: auto;
+}
+@media (min-width: 761px) {
+  .reading-body {
+    font-size: var(--text-lg);
+  }
+}
+
+/* Topics follow the writing index: a rule per row, the count where a date would sit. */
+main > .topic-grid {
+  margin-left: 0;
+}
+.topic {
+  display: grid;
+  grid-template-columns: var(--width-margin) minmax(0, 1fr);
+  column-gap: var(--space-6);
+  align-items: baseline;
+  border-top: 1px solid var(--color-line);
+  padding: var(--space-5) 0;
   color: var(--color-ink);
   text-decoration: none;
 }
-.topic strong {
-  font-size: var(--text-lg);
-  font-weight: 500;
+.topic:last-child {
+  border-bottom: 1px solid var(--color-line);
 }
-.topic:hover {
-  border-color: var(--color-brand);
+.topic strong {
+  grid-column: 2;
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+  font-weight: 500;
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-tight);
+}
+.topic span {
+  grid-column: 1;
+  grid-row: 1;
+  color: var(--color-muted);
+}
+.topic:hover strong {
+  color: var(--color-brand);
 }
 
 /* Navigation between pages */
-.back {
-  display: inline-block;
-  margin-bottom: var(--space-6);
+/* Equal outer columns keep the page label centred with one link or two. */
+main > .pagination,
+main > .adjacent-posts {
+  margin-left: 0;
 }
 .pagination {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: var(--space-4);
   margin-top: var(--space-6);
   color: var(--color-muted);
+}
+.pagination > :last-child {
+  justify-self: end;
 }
 .adjacent-posts {
   display: grid;
@@ -347,10 +399,11 @@ th {
 }
 
 .site-footer {
-  max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure) + 2 * var(--space-5));
-  margin: auto;
+  width: calc(100% - 2 * var(--space-5));
+  max-width: calc(var(--width-margin) + var(--space-6) + var(--width-measure));
+  margin: 0 auto;
   border-top: 1px solid var(--color-line);
-  padding: var(--space-5);
+  padding: var(--space-5) 0;
   color: var(--color-muted);
   font-size: var(--text-sm);
   display: flex;
@@ -363,8 +416,47 @@ th {
   margin: 0;
   max-width: var(--width-measure);
 }
+/* The family's 44px target: an invisible hit area, so small links keep their layout. */
+.brand,
+.post-card h2 a,
+.read-more,
+.tag,
+.pagination a,
+.site-footer a {
+  position: relative;
+}
+.brand::after,
+.post-card h2 a::after,
+.read-more::after,
+.tag::after,
+.pagination a::after,
+.site-footer a::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  height: var(--size-touch);
+  transform: translateY(-50%);
+}
 .back-to-top {
   display: none;
+}
+/* No script here: browsers with scroll timelines keep it out of the way at the top. */
+@keyframes back-to-top-reveal {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+@supports (animation-timeline: scroll()) {
+  .back-to-top {
+    animation: back-to-top-reveal linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 40vh;
+  }
 }
 
 /* Progressive appearance control; ordinary navigation needs no script. */
@@ -442,6 +534,18 @@ th {
   .post-card > .eyebrow {
     margin-bottom: var(--space-3);
   }
+  .topic {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--space-2);
+  }
+  .topic strong,
+  .topic span {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  .topic span {
+    grid-row: 1;
+  }
 }
 @media (max-width: 600px) {
   html {
@@ -451,7 +555,7 @@ th {
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--size-touch);
     gap: 0 var(--space-3);
-    padding: var(--space-3) var(--space-5);
+    padding: var(--space-3) 0;
   }
   .site-header .brand small {
     display: none;
@@ -465,7 +569,6 @@ th {
     display: inline-flex;
     align-items: center;
   }
-  .topic-grid,
   .adjacent-posts {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -517,6 +620,10 @@ th {
   }
 }
 @media print {
+  body {
+    display: block;
+    min-height: 0;
+  }
   .site-header,
   .back-to-top,
   .skip,

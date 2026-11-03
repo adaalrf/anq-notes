@@ -9,7 +9,7 @@ export function topicsPage(tags: [string, { label: string; posts: Document[] }][
           ? tags
               .map(
                 ([slug, tag]) =>
-                  `<a class="panel topic" href="/tags/${slug}/"><strong>${escape(tag.label)}</strong><span>${tag.posts.length} ${tag.posts.length === 1 ? 'post' : 'posts'}</span></a>`,
+                  `<a class="topic" href="/tags/${slug}/"><strong>${escape(tag.label)}</strong><span>${tag.posts.length} ${tag.posts.length === 1 ? 'post' : 'posts'}</span></a>`,
               )
               .join('')
           : '<p>No topics yet.</p>'

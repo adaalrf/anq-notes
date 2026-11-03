@@ -156,6 +156,109 @@ try {
   await scan.goto(origin + '/blog/');
   await scan.screenshot({ path: 'test-results/writing-desktop.png', fullPage: true });
   await scan.setViewportSize({ width: 390, height: 844 });
+  await scan.goto(`${origin}/blog/`);
+  // Standalone controls meet the family's 44px target; links inside a sentence are exempt.
+  assert.deepEqual(
+    await scan.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>('main a, header a, footer a')]
+        .filter((control) => {
+          const sentence = control.closest('p, li');
+          return !sentence || sentence.textContent!.trim() === control.textContent!.trim();
+        })
+        .filter((control) => control.getClientRects().length)
+        .filter(
+          (control) =>
+            Math.max(
+              control.getBoundingClientRect().height,
+              parseFloat(getComputedStyle(control, '::after').height) || 0,
+            ) < 44,
+        )
+        .map((control) => control.className + ':' + control.textContent!.trim().slice(0, 24)),
+    ),
+    [],
+  );
+  // Pagination sits evenly between the last post's rule and the footer.
+  for (const path of ['/blog/', '/blog/page/2/']) {
+    await scan.goto(origin + path);
+    const gaps = await scan.evaluate(() => {
+      const nav = document.querySelector('.pagination')!.getBoundingClientRect();
+      const posts = [...document.querySelectorAll('.post-card')];
+      const above = posts.at(-1)!.getBoundingClientRect().bottom;
+      const below = document.querySelector('.site-footer')!.getBoundingClientRect().top;
+      const label = document.querySelector('.pagination > :nth-child(2)')!;
+      const middle = label.getBoundingClientRect();
+      return {
+        above: nav.top - above,
+        below: below - nav.bottom,
+        offCentre: middle.left + middle.width / 2 - (nav.left + nav.width / 2),
+        offRule: nav.left - posts.at(-1)!.getBoundingClientRect().left,
+      };
+    });
+    assert.ok(Math.abs(gaps.above - gaps.below) < 2, `${path} ${JSON.stringify(gaps)}`);
+    assert.ok(Math.abs(gaps.offCentre) < 1, `${path} ${JSON.stringify(gaps)}`);
+    assert.ok(Math.abs(gaps.offRule) < 1, `${path} ${JSON.stringify(gaps)}`);
+  }
+  // Short pages keep the footer at the bottom of the screen.
+  await scan.setViewportSize({ width: 1556, height: 1400 });
+  for (const path of ['/tags/', '/about/', '/missing/', '/blog/page/2/']) {
+    await scan.goto(origin + path);
+    const under = await scan.evaluate(
+      () => innerHeight - document.querySelector('.site-footer')!.getBoundingClientRect().bottom,
+    );
+    assert.ok(Math.abs(under) < 2, `${path} leaves ${under}px under the footer`);
+  }
+  // Every rule on the page starts and ends with the content.
+  for (const width of [1556, 390]) {
+    await scan.setViewportSize({ width, height: 844 });
+    await scan.goto(`${origin}/blog/`);
+    const edges = await scan.evaluate(() =>
+      ['.site-header', '.post-card', '.pagination', '.site-footer'].map((selector) => {
+        const { left, right } = document.querySelector(selector)!.getBoundingClientRect();
+        return [Math.round(left), Math.round(right)];
+      }),
+    );
+    assert.deepEqual(new Set(edges.map(String)).size, 1, JSON.stringify(edges));
+    await scan.goto(`${origin}/blog/one-build-many-static-hosts/`);
+    // Tables fill the text column.
+    const widths = await scan.evaluate(() =>
+      ['.prose', '.prose tr'].map(
+        (selector) => document.querySelector(selector)!.getBoundingClientRect().width,
+      ),
+    );
+    assert.ok(Math.abs(widths[0] - widths[1]) < 1, JSON.stringify(widths));
+    // A post is one block centred under the rules, and its title sits where every page's does.
+    const post = await scan.evaluate(() => {
+      const rule = document.querySelector('.adjacent-posts')!.getBoundingClientRect();
+      const body = document.querySelector('.prose')!.getBoundingClientRect();
+      const heading = document.querySelector('h1')!.getBoundingClientRect();
+      return {
+        title: heading.top,
+        left: body.left - rule.left,
+        right: rule.right - body.right,
+        titleLeft: heading.left - body.left,
+      };
+    });
+    assert.ok(Math.abs(post.left - post.right) < 1, JSON.stringify(post));
+    assert.ok(Math.abs(post.titleLeft) < 1, JSON.stringify(post));
+    await scan.goto(`${origin}/about/`);
+    const pageTitle = await scan.evaluate(
+      () => document.querySelector('h1')!.getBoundingClientRect().top,
+    );
+    assert.ok(Math.abs(post.title - pageTitle) < 1, JSON.stringify({ ...post, pageTitle }));
+    await scan.goto(`${origin}/blog/one-build-many-static-hosts/`);
+    const postEdges = await scan.evaluate(() =>
+      ['.site-header', '.adjacent-posts', '.site-footer'].map((selector) => {
+        const { left, right } = document.querySelector(selector)!.getBoundingClientRect();
+        return [Math.round(left), Math.round(right)];
+      }),
+    );
+    assert.deepEqual(new Set(postEdges.map(String)).size, 1, JSON.stringify(postEdges));
+  }
+  // The Top button stays out of the way until the reader has scrolled.
+  const top = scan.getByRole('link', { name: 'Back to top', exact: true });
+  await expect(top).toBeHidden();
+  await scan.evaluate(() => window.scrollTo({ top: 600, behavior: 'instant' }));
+  await expect(top).toBeVisible();
   await scan.screenshot({ path: 'test-results/writing-mobile.png', fullPage: true });
   await scan.goto(origin + '/blog/a-small-visual-vocabulary/');
   await scan.screenshot({ path: 'test-results/post-mobile.png', fullPage: true });
