@@ -21,11 +21,10 @@ after(async () => {
   await cleanup(root);
 });
 test('preview serves HTML/CSS/XML and redirects directory paths', async () => {
-  assert.equal((await fetch(origin + '/')).status, 200);
-  assert.match(
-    (await fetch(origin + '/styles/site.css')).headers.get('content-type')!,
-    /text\/css/,
-  );
+  const home = await fetch(origin + '/');
+  assert.equal(home.status, 200);
+  const stylesheet = (await home.text()).match(/\/styles\/site\.\w+\.css/)![0];
+  assert.match((await fetch(origin + stylesheet)).headers.get('content-type')!, /text\/css/);
   assert.match((await fetch(origin + '/rss.xml')).headers.get('content-type')!, /application\/xml/);
   const redirect = await fetch(origin + '/blog?test=1', { redirect: 'manual' });
   assert.equal(redirect.status, 308);

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile, writeFile, mkdir, symlink, readdir } from 'node:fs/promises';
+import { lstat, readFile, writeFile, mkdir, symlink, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { build } from '../src/build.js';
 import { parseContent } from '../src/content.js';
@@ -213,6 +213,26 @@ test('preview config disables indexing, 404 is noindex, and asset files are copi
     assert.match(await readFile(join(root, 'public/index.html'), 'utf8'), /noindex,nofollow/);
     assert.match(await readFile(join(root, 'public/404.html'), 'utf8'), /noindex,nofollow/);
     assert.equal(await readFile(join(root, 'public/assets/example.txt'), 'utf8'), 'Static bytes.');
+  } finally {
+    await cleanup(root);
+  }
+});
+test('the site names its own files after their content and leaves author assets alone', async () => {
+  const root = await fixture();
+  try {
+    await writeFile(join(root, 'assets/photo.png'), 'Author bytes.');
+    await writeFile(
+      join(root, 'styles/tokens.css'),
+      "@font-face { src: url('/assets/fonts/anq-serif.woff2'); }",
+    );
+    await build(root, config);
+    const page = await readFile(join(root, 'public/index.html'), 'utf8');
+    const tokens = page.match(/styles\/tokens\.[0-9a-f]{10}\.css/)![0];
+    const css = await readFile(join(root, 'public', tokens), 'utf8');
+    const font = css.match(/assets\/fonts\/anq-serif\.[0-9a-f]{10}\.woff2/)![0];
+    await lstat(join(root, 'public', font));
+    await lstat(join(root, 'public/assets/photo.png'));
+    await assert.rejects(lstat(join(root, 'public/styles/tokens.css')));
   } finally {
     await cleanup(root);
   }

@@ -8,7 +8,7 @@ content/pages/    Markdown and HTML pages
 content/posts/    Markdown posts with YAML metadata
 styles/           Shared visual tokens and page/component CSS
 templates/        One HTML layout
-assets/           Static files copied into output
+assets/           Static files copied into output; the site's own get hashed names
 src/
   pages/          Content page, post, listing, topics and 404 HTML
   components/     Shared headings, post cards and pagination

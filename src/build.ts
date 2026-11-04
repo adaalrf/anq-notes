@@ -10,7 +10,7 @@ import {
   open,
 } from 'node:fs/promises';
 import { join, resolve, dirname } from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { validateConfig } from './config.js';
 import { readContent, tagSlug, type Document } from './content.js';
 import { layout, escape } from './render.js';
@@ -55,6 +55,32 @@ async function assets(root: string, relative: string, files: Map<string, string 
       files.set(source.split('\\').join('/'), await regularFile(join(root, source)));
     else throw new Error(`${source}: unsupported asset type.`);
   }
+}
+// The site's own files. Images authors link from their writing keep their URLs.
+const ownFile = /^(styles\/[^/]+\.css|assets\/(theme\.js|mark\.svg|fonts\/[^/]+\.woff2))$/;
+function fingerprint(files: Map<string, string | Buffer>) {
+  const hashed = new Map<string, string>();
+  const rewrite = (text: string) => {
+    for (const [from, to] of hashed)
+      for (const quote of ['"', "'"])
+        text = text.replaceAll(`${quote}/${from}${quote}`, `${quote}/${to}${quote}`);
+    return text;
+  };
+  // Stylesheets name the fonts, so their hashes have to come after the fonts'.
+  const names = [...files.keys()]
+    .filter((name) => ownFile.test(name))
+    .sort((a, b) => Number(a.endsWith('.css')) - Number(b.endsWith('.css')));
+  for (const name of names) {
+    const source = files.get(name)!;
+    const body = name.endsWith('.css') ? rewrite(source.toString()) : source;
+    const hash = createHash('sha256').update(body).digest('hex').slice(0, 10);
+    const target = name.replace(/(\.\w+)$/, `.${hash}$1`);
+    files.delete(name);
+    files.set(target, body);
+    hashed.set(name, target);
+  }
+  for (const [name, body] of files)
+    if (name.endsWith('.html')) files.set(name, rewrite(body.toString()));
 }
 const outputPath = (url: string) => (url === '/' ? 'index.html' : url.slice(1) + 'index.html');
 export async function build(root: string, rawConfig: unknown) {
@@ -199,6 +225,7 @@ export async function build(root: string, rawConfig: unknown) {
       `User-agent: *\n${config.indexable ? 'Allow: /' : 'Disallow: /'}\nSitemap: ${config.url}/sitemap.xml\n`,
     );
     add(marker, markerText);
+    fingerprint(files);
     checkLinks(files, config.url);
     stage = await mkdtemp(join(root, '.anq-build-'));
     for (const [path, body] of files) {

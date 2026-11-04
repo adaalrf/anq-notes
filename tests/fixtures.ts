@@ -25,7 +25,7 @@ export async function fixture() {
     'templates/layout.html',
     'assets/mark.svg',
     'assets/theme.js',
-    'assets/fonts/source-serif-4.woff2',
+    'assets/fonts/anq-serif.woff2',
   ])
     await writeFile(join(root, file), await readFile(resolve(file)));
   await writeFile(
