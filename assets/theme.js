@@ -40,7 +40,9 @@
     control.hidden = false;
     apply();
     control.addEventListener('click', () => {
-      preference = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      const chosen = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      // Choosing what the system already shows hands the choice back to the system.
+      preference = chosen === (system.matches ? 'dark' : 'light') ? 'system' : chosen;
       try {
         if (preference === 'system') localStorage.removeItem(key);
         else localStorage.setItem(key, preference);
