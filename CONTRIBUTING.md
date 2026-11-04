@@ -27,8 +27,12 @@ Run `npm run check` (format, types, isolated build/preview tests and sample buil
 For browser/navigation changes run `npm run test:browser`; install Chromium with
 `npx playwright install chromium`, or set `CHROMIUM_EXECUTABLE` on NixOS. The
 browser checks use temporary fictional publications. Container changes also need
-`npm run test:container` with rootless Podman. Read the README scope before
-adding features. Keep screenshots fictional and preserve Git signing settings.
+`npm run test:container` with rootless Podman. The container check needs free loopback port 18087,
+uses a read-only filesystem with writable `/tmp`, drops capabilities and removes its
+test container. Browser checks exercise navigation with JavaScript disabled, posts,
+topics, pagination, XML feeds, the 404 page, mobile overflow and automated
+accessibility scans; those scans aren't a complete manual audit. `PORT=5177 npm run dev`
+changes the preview port. Read the limits in the README before adding features. Keep screenshots fictional and preserve Git signing settings.
 
 For visual changes, use the local CSS tokens and preserve contrast, visible
 keyboard focus, readable errors and text labels for status. Colour alone must

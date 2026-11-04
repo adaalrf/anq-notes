@@ -2,193 +2,91 @@
 
 [![Checks](https://github.com/adaalrf/anq-notes/actions/workflows/check.yml/badge.svg)](https://github.com/adaalrf/anq-notes/actions/workflows/check.yml)
 
-A TypeScript publication tool that turns Markdown and HTML into a reading site
-with topics, pagination and RSS. The output works without browser JavaScript;
-content and link validation happen before the previous successful build is replaced.
+A small static site generator, first made for a tiny web server that couldn't run
+Node.
 
-[Read the sample publication](https://notes.demo.adaalrf.dev) · [Case study](https://adaalrf.dev/work/anq-notes/) · [Source map](CONTRIBUTING.md)
+[Read the sample publication](https://notes.demo.adaalrf.dev) · [Read the case study](https://adaalrf.dev/work/anq-notes/)
 
-![Sample writing page](docs/screenshots/writing-desktop.png)
+![The sample writing page, with fictional posts](docs/screenshots/writing-desktop.png)
 
-## Review path
+The sample publication is fictional, and it's built from the files in this
+repository.
 
-- [Rendering](src/render.ts) handles sanitized content and heading links.
-- [Build orchestration](src/build.ts) validates the complete site before replacing output.
-- [Build regressions](tests/build.test.ts) check broken links, invalid content and preservation of the last good build.
+## Why it exists
 
-## How this project is developed
+It started with a very small web server that couldn't run Node, so a site for it
+had to be plain files. That turned into an interest in small sites that load
+quickly, and in what a generator actually has to do to produce them.
 
-The maintainer sets scope and design direction; AI coding agents write and revise
-implementation code. [Project rules](AGENTS.md) require escaped metadata, sanitized content
-and preservation of previous output on validation failure. Build fixtures check
-validation and output preservation; browser checks exercise the generated site
-with JavaScript disabled.
+Turning a folder of text into a website sounds like a small job, but the interesting
+questions turn up once you try it. What should happen when a build fails halfway
+through? When a link points at a page that doesn't exist? How do you let a post
+contain HTML without letting it run scripts?
 
-The [initial public release](https://github.com/adaalrf/anq-notes/commit/6a9584a) is a squashed snapshot of pre-publication development; subsequent changes are recorded incrementally.
+Building the generator was a way to find out. It isn't meant to replace an existing
+one, but if it's useful to someone, that's a good thing.
 
-## Start locally
+## What it does
 
-Requires Node 26+ and npm. From this directory:
+- Turns Markdown and HTML files into a complete site, with no JavaScript needed to
+  read it.
+- Adds a writing index, topics, pagination, an RSS feed and a sitemap.
+- Checks links, images and metadata before anything is published.
+- Keeps the last good site in place when a build fails.
+- Removes scripts and other unsafe content from what's written.
+- Keeps drafts out of every page and feed.
+
+## How it works
+
+A build happens in two steps. First it reads and checks everything, and writes the
+result to a temporary folder. Only when the whole site is valid does that folder
+replace the published one. A mistake in a post therefore stops the build, and the
+previous site stays exactly as it was.
+
+The output is plain HTML and CSS, so any static host can serve it, with no server
+code or database behind it. The only script is an optional theme switch.
+
+## Try it yourself
+
+You'll need Node.js 26 or newer and npm. Then, from this directory:
 
 ```sh
 npm ci
 npm run dev
 ```
 
-Open **http://localhost:5176**. The preview builds once and binds to loopback.
-After editing content or styles, run `npm run build` in another terminal and
-refresh the browser. `PORT=5177 npm run dev` changes the preview port. Ctrl-C
-stops the preview. The preview server is a development tool, not the production
-web server.
+Open <http://localhost:5176>. The preview builds once, so after an edit, run
+`npm run build` in another terminal and refresh. Press Ctrl-C to stop.
 
-## Make it yours
+To make it your own, edit `site.config.ts`, then replace the fictional posts in
+`content/posts/`. The [writing guide](docs/WRITING.md) has the details.
 
-1. Edit `site.config.ts`: name, description, author and canonical HTTPS domain.
-2. Edit `content/pages/index.md`, the HTML about page, and the sample attribution in `templates/layout.html`.
-3. Replace the fictional starter posts in `content/posts/`.
-4. Adjust `styles/tokens.css`, then `styles/site.css` for component/layout rules.
-5. Run `npm run check` and inspect the output.
+## Under the hood
 
-The default canonical URL is `https://example.com`; `indexable: false` keeps the
-starter out of search indexes. Change both deliberately when preparing an actual
-launch. This project does not modify DNS or publish anything itself. URL-prefix
-hosting is outside v1: serve the site at a domain/subdomain root.
+Written in TypeScript. There's no framework, client bundle or plugin system; the
+generator is a handful of small modules.
 
-## Write content
+| Worth reading                          | Why                                       |
+| -------------------------------------- | ----------------------------------------- |
+| [`build.ts`](src/build.ts)             | Checks the whole site before replacing it |
+| [`render.ts`](src/render.ts)           | Markdown, sanitizing and heading links    |
+| [`links.ts`](src/links.ts)             | Finds broken links, fragments and images  |
+| [`build.test.ts`](tests/build.test.ts) | What happens when content is wrong        |
 
-Pages accept `.md` or `.html`; posts accept `.md`. Both start with YAML front
-matter. Each lives directly in its folder; nested content folders are unsupported.
+## What it leaves out
 
-```md
----
-title: A useful observation
-description: A short plain-text description used on cards and in feeds.
-date: 2026-10-27
-tags: [Notes, Design]
-draft: false
----
+This is a small project. There's no plugin system, scheduled publishing or nested
+content folders, and it doesn't support hosting under a URL prefix. It trusts its
+author: sanitizing protects the site from mistakes, and it isn't meant for content
+uploaded by strangers.
 
-A paragraph with **emphasis** and a [link](/about/).
+## Going further
 
-## A clear heading
+- [Writing](docs/WRITING.md): setting it up, and how posts and pages work
+- [Architecture](docs/ARCHITECTURE.md): the source layout, build steps and recovery
+- [Deployment](docs/DEPLOYMENT.md): static hosts and containers
+- [Contributing](CONTRIBUTING.md): where things live and how to run the tests
+- [Design](DESIGN.md): the visual rules
 
-More detail belongs here.
-```
-
-`title` and `description` are required. Posts also require a real `YYYY-MM-DD`
-date. Pages omit dates and tags. Optional `slug` overrides the filename; use
-lowercase letters/digits separated by single hyphens. `index` is the homepage.
-Posts render at `/blog/slug/`; other pages render at `/slug/`.
-
-Use `draft: true` to exclude a document from every generated page/feed. Draft
-metadata is still validated. Dates control ordering; they do not schedule future
-publication. Post order is descending date, then ascending slug for ties. Topics
-are ordered by normalized URL slug; conflicting labels produce an error rather
-than silently sharing a URL. Keep topic names consistent (for example `Design`).
-
-The layout already provides the page title as h1, so start body sections at h2.
-Markdown headings receive unique IDs for fragment links. Internal links must
-point to generated URLs, including trailing slashes for page directories. Images
-need alt text (or `alt=""` for decoration). Put local images/fonts/files in
-`assets/` and link them as `/assets/filename`.
-
-Content HTML is sanitized: scripts, handlers, inline styles and unsafe link
-protocols are removed. This supports prose, code, tables, images and semantic HTML
-pages. The template, configuration and build source remain trusted project code;
-this is not an untrusted-upload service. There is no executable front matter.
-
-## Structure and theme
-
-```text
-site.config.ts    Small typed site configuration
-content/pages/    Markdown/HTML pages
-content/posts/    Markdown posts with YAML metadata
-styles/           Shared visual tokens and page/component CSS
-templates/        One HTML layout
-assets/           Static files copied into output
-src/
-  pages/          Content page, post, listing, topics and 404 HTML
-  components/     Shared headings, post cards and pagination
-  build.ts        Filesystem orchestration, routes, feeds and output replacement
-  render.ts       Sanitized Markdown, metadata escaping and document layout
-  content.ts      Frontmatter parsing and published content ordering
-  links.ts        Generated link, fragment and image checks
-  config.ts       Typed site configuration validation
-  cli.ts          Build entry point
-  serve.ts        Local preview server
-tests/            Integration, preview, browser and container checks
-public/           Generated output; ignored by Git
-```
-
-The theme uses the same token names, typography and spacing conventions as ANQ Blog and the
-portfolio family. Keep colour/font/spacing roles in `tokens.css`, page structure
-in `site.css`, and author prose in `content/`. No UI package, CSS framework,
-client bundle or plugin system is needed for v1. Layout placeholders are named
-`{{title}}`, `{{siteTitle}}`, `{{description}}`, `{{canonical}}`, `{{language}}`,
-`{{author}}`, `{{robots}}` and `{{body}}`; metadata is escaped and body HTML has
-already been sanitized. The optional `{{writingCurrent}}`, `{{topicsCurrent}}` and `{{aboutCurrent}}`
-placeholders emit trusted current-section attributes for the standard navigation.
-Update the layout navigation when adding/removing pages.
-
-## Builds and errors
-
-A build validates metadata, URLs, output collisions, links/fragments, duplicate
-IDs, image alt attributes and same-origin image sources before publishing output. Generated paths, file
-ordering and RSS dates are deterministic. RSS includes the latest 20 posts; the
-sitemap includes published pages, listings and topics, excluding the 404 page.
-
-An invalid build leaves the previous generated site in place. Successful builds
-replace it and remove stale generated routes. `public/` must be absent or contain
-this generator's ownership marker; an unknown existing directory is preserved.
-Never edit generated output: source files are the durable work.
-
-Builds use a lock, a staging directory and a rename with a previous-output
-fallback. This is local build protection, not a production deployment transaction.
-If a process crashes, confirm no build is running before removing the stale
-`.anq-build.lock`. Inspect leftover `.anq-build-*`/`.anq-previous-*` directories
-before recovery; the generator never silently adopts unmanaged output. Source
-and asset symlinks are rejected. External links are not fetched or checked; external
-images are rejected because the supplied container permits only local images.
-
-## Verify
-
-```sh
-npm run check
-npm run test:browser
-```
-
-`check` runs formatting, type checking, integration/preview tests and a sample
-build. Browser checks need an installed Playwright Chromium; on NixOS set
-`CHROMIUM_EXECUTABLE` to a working Nix Chromium binary. They exercise navigation
-with JavaScript disabled, posts/topics/pagination, XML feeds, 404, mobile overflow
-and automated accessibility scans. Scans are not a complete manual audit.
-
-## Package and publish
-
-Deploy the **contents of `public/`** to a static host. Configure its 404 handler
-to serve `404.html` with status 404. No Node process or database is required by
-that output.
-
-An optional container image serves the generated site on port 8080:
-
-```sh
-podman build --build-arg SITE_URL=https://notes.example.com -t localhost/anq-notes:v1 .
-npm run test:container
-```
-
-The image builds with pinned Node 26 and serves through pinned Caddy as UID 1000
-on port 8080. `/healthz` returns 200; no app migrations or writable data volume
-are needed. The container check uses free loopback port 18087, a read-only
-filesystem and writable `/tmp`, drops capabilities, and removes its test container.
-The supplied production CSP supports local assets; keep images/fonts local.
-Do not deploy the source, credentials, node_modules or development preview server.
-
-See [deployment](docs/DEPLOYMENT.md) for static hosting and container configuration.
-Try the [sample publication](https://notes.demo.adaalrf.dev).
-
-`SITE_URL=https://notes.example.com npm run build` overrides the canonical origin
-for a release without editing the starter configuration. Containers accept the
-same value as a build argument. The existing HTTPS-origin validation applies;
-this does not change `indexable` or enable indexing for the fictional demo.
-
-See [contributing and source layout](CONTRIBUTING.md) for development commands, editing locations and verification boundaries.
+The [first public commit](https://github.com/adaalrf/anq-notes/commit/6a9584a) is a
+squashed snapshot of earlier work; changes since then are recorded one by one.
