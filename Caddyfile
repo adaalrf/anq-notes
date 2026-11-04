@@ -10,6 +10,10 @@
         X-Content-Type-Options nosniff
         Referrer-Policy no-referrer
         Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        Cross-Origin-Opener-Policy same-origin
+        Cross-Origin-Resource-Policy same-origin
+        # The proxy in front adds its own.
+        -Server
     }
     respond /healthz "ok" 200
     file_server {
