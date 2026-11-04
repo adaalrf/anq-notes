@@ -18,13 +18,13 @@ It started with a very small web server that couldn't run Node, so a site for it
 had to be plain files. That turned into an interest in small sites that load
 quickly, and in what a generator actually has to do to produce them.
 
-Turning a folder of text into a website sounds like a small job, but the interesting
+Turning a folder of text into a website sounds like a small job, but the real
 questions turn up once you try it. What should happen when a build fails halfway
 through? When a link points at a page that doesn't exist? How do you let a post
 contain HTML without letting it run scripts?
 
-Building the generator was a way to find out. It isn't meant to replace an existing
-one, but if it's useful to someone, that's a good thing.
+Building the generator was a way to find out, and anyone with a similarly small
+server is welcome to it.
 
 ## What it does
 
@@ -75,7 +75,7 @@ generator is a handful of small modules.
 
 ## What it leaves out
 
-This is a small project. There's no plugin system, scheduled publishing or nested
+There's no plugin system, scheduled publishing or nested
 content folders, and it doesn't support hosting under a URL prefix. It trusts its
 author: sanitizing protects the site from mistakes, and it isn't meant for content
 uploaded by strangers.
