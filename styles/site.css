@@ -93,6 +93,13 @@ h2 a:hover {
   font-size: var(--text-ui);
   line-height: 1.5;
 }
+.link-arrow {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-left: 0.25em;
+  vertical-align: -0.125em;
+}
 .muted {
   color: var(--color-muted);
 }
