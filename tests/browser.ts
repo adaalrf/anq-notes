@@ -134,7 +134,7 @@ try {
   ]) {
     await scan.goto(origin + route);
     await expect(scan.locator('script')).toHaveCount(1);
-    await expect(scan.locator('script')).toHaveAttribute('src', '/assets/theme.js');
+    await expect(scan.locator('script')).toHaveAttribute('src', /^\/assets\/theme\.\w+\.js$/);
     const result = await new AxeBuilder({ page: scan })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
       .analyze();

@@ -16,6 +16,13 @@
         # The proxy in front adds its own.
         -Server
     }
+    # Hashed files never change, so returning visitors needn't ask. Everything else revalidates.
+    @fingerprinted {
+        file
+        path_regexp \.[0-9a-f]{10}\.(css|js|svg|woff2)$
+    }
+    header @fingerprinted Cache-Control "public, max-age=31536000, immutable"
+    header ?Cache-Control "no-cache"
     respond /healthz "ok" 200
     file_server {
         hide .anq-ssg-output

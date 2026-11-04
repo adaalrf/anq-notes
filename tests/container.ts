@@ -47,9 +47,13 @@ try {
   assert.equal(info.HostConfig.ReadonlyRootfs, true);
   const home = await fetch(origin + '/');
   assert.equal(home.status, 200);
-  assert.match(await home.text(), /A notebook for things worth keeping/);
+  const page = await home.text();
+  assert.match(page, /A notebook for things worth keeping/);
   assert.match(home.headers.get('content-security-policy')!, /default-src 'none'/);
-  assert.equal((await fetch(origin + '/styles/site.css')).status, 200);
+  const stylesheet = await fetch(origin + page.match(/\/styles\/site\.\w+\.css/)![0]);
+  assert.equal(stylesheet.status, 200);
+  assert.match(stylesheet.headers.get('cache-control')!, /immutable/);
+  assert.equal(home.headers.get('cache-control'), 'no-cache');
   assert.equal((await fetch(origin + '/rss.xml')).status, 200);
   const missing = await fetch(origin + '/missing/');
   assert.equal(missing.status, 404);
